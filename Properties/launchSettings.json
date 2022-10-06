@@ -1,0 +1,12 @@
+{
+  "profiles": {
+    "WinUI3_UnhandledExceptionTestApp (Package)": {
+      "commandName": "MsixPackage",
+      "nativeDebugging": true
+    },
+    "WinUI3_UnhandledExceptionTestApp (Unpackaged)": {
+      "commandName": "Project",
+      "nativeDebugging": true
+    }
+  }
+}
