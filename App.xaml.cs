@@ -33,7 +33,7 @@ namespace WinUI3_UnhandledExceptionTestApp
     // telling us that the app will terminate ; the app then goes into a weird state,
     // where the UI doesn't show, and you have to terminate it with 'Stop Debugging'.
 
-    public static bool ThrowExceptionInAppLaunched                = true ; 
+    public static bool ThrowExceptionInAppLaunched                = false ; 
 
     // If we set this to true, our handler isn't called ; two message boxes appear
     // telling us that the app will terminate ; the app then goes into a weird state,
@@ -52,8 +52,8 @@ namespace WinUI3_UnhandledExceptionTestApp
 
       this.InitializeComponent() ;
 
-      // Set up both flavours of 'UnhandledException' event handler.
-      // We expect any exceptions throw from anywhere in the app
+      // Set up all known flavours of 'UnhandledException' event handler.
+      // We surely can expect any exceptions throw from *anywhere* in the app
       // to be caught by one of these ???
 
       this.UnhandledException += (
@@ -70,11 +70,27 @@ namespace WinUI3_UnhandledExceptionTestApp
         ) ;
       } ;
 
+      Microsoft.UI.Xaml.Application.Current.UnhandledException += (
+        object                                        sender, 
+        Microsoft.UI.Xaml.UnhandledExceptionEventArgs unhandledExceptionEventArgs 
+      ) => {
+        // This handler does get called, but only in the same circumstances as App.UnhandledException.
+        // And it only tells us 'Error in the application' ; the Message from the thrown exception isn't available.
+        // Setting 'Handled' to true allows the app to continue, ie it won't terminate.
+        unhandledExceptionEventArgs.Handled = true ;
+        System.Diagnostics.Debug.WriteLine(  
+          $"Microsoft.UI.Xaml.Application.Current.UnhandledException : '{unhandledExceptionEventArgs.Exception.Message}'"
+        ) ;
+        System.Diagnostics.Debug.WriteLine(  
+          $"Stack trace : {unhandledExceptionEventArgs.Exception.StackTrace??"??"}"
+        ) ;
+      } ;
+
       System.AppDomain.CurrentDomain.UnhandledException += (
         object                             sender, 
         System.UnhandledExceptionEventArgs unhandledExceptionEventArgs
       ) => {
-        // We've never seen this be called ...
+        // We've never seen this being called ...
         System.Diagnostics.Debug.WriteLine(  
           $"AppDomain.CurrentDomain.UnhandledException raised : {unhandledExceptionEventArgs.ExceptionObject} {unhandledExceptionEventArgs.IsTerminating}"
         ) ;
