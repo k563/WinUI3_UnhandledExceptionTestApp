@@ -6,10 +6,10 @@ namespace WinUI3_UnhandledExceptionTestApp
 {
 
   // NOTE : DISABLE_XAML_GENERATED_BREAK_ON_UNHANDLED_EXCEPTION has been defined
-  // in the project settings, so that we won't get a Debug.Break if an exception is trapped.
-  // Instead, the unhandled exception will just be handled here. 
+  // in the project settings, so that we won't get a Debug.Break if an exception
+  // does get handled. Instead, the unhandled exception will just be handled here. 
 
-  // Run the app with Debug/x64 to demonstrate the issues.
+  // Build and run the app with Debug/x64 to demonstrate the issues.
 
   public partial class App : Microsoft.UI.Xaml.Application
   {
@@ -29,13 +29,13 @@ namespace WinUI3_UnhandledExceptionTestApp
 
     public static bool ThrowExceptionInAppConstructor             = false ;
 
-    // If we set this to true, our handler isn't called ; message boxes appear
+    // If we set this to true, our handler isn't called ; two message boxes appear
     // telling us that the app will terminate ; the app then goes into a weird state,
     // where the UI doesn't show, and you have to terminate it with 'Stop Debugging'.
 
-    public static bool ThrowExceptionInAppLaunched                = false ; 
+    public static bool ThrowExceptionInAppLaunched                = true ; 
 
-    // If we set this to true, our handler isn't called ; message boxes appear
+    // If we set this to true, our handler isn't called ; two message boxes appear
     // telling us that the app will terminate ; the app then goes into a weird state,
     // where the UI doesn't show, and you have to terminate it with 'Stop Debugging'.
 
@@ -92,7 +92,7 @@ namespace WinUI3_UnhandledExceptionTestApp
     {
       if ( App.ThrowExceptionInAppLaunched ) 
       { 
-        System.Diagnostics.Debug.WriteLine("Throwing exception in AppLaunched") ;
+        System.Diagnostics.Debug.WriteLine("Throwing exception in App.OnLaunched") ;
         throw new System.ApplicationException("Thrown in App.OnLaunched") ; 
       }
       m_window = new MainWindow() ;
