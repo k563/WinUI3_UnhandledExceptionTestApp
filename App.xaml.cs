@@ -47,6 +47,12 @@ namespace WinUI3_UnhandledExceptionTestApp
 
     public static bool ThrowExceptionInMainWindowActivatedHandler = false ;
 
+    // If we set this to true, the handler is called as expected.
+    // The test code is marking the 'Activated' handler as async,
+    // as suggested in https://github.com/microsoft/CsWinRT/issues/1259
+
+    public static bool ThrowExceptionInMainWindowActivatedHandler_Async = true ;
+
     public App ( )
     {
 

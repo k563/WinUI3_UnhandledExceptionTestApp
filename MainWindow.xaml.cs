@@ -10,6 +10,8 @@ namespace WinUI3_UnhandledExceptionTestApp
 
     private int m_nActivationsSeen = 0 ;
 
+    private int m_nAsyncActivationsSeen = 0 ;
+
     public MainWindow ( )
     {
       this.InitializeComponent() ;
@@ -33,6 +35,24 @@ namespace WinUI3_UnhandledExceptionTestApp
             { 
               System.Diagnostics.Debug.WriteLine("Throwing exception in MainWindow Activated handler") ;
               throw new System.ApplicationException("Thrown in MainWindow Activated handler") ; 
+            }
+          }
+        }
+      } ;
+
+      this.Activated += async (s,e) => {
+        System.Diagnostics.Debug.WriteLine($"MainWindow Activated ASYNC #{m_nActivationsSeen} {e.WindowActivationState}") ;
+        if ( e.WindowActivationState == Microsoft.UI.Xaml.WindowActivationState.CodeActivated )
+        {
+          m_nAsyncActivationsSeen++ ;
+          if ( m_nAsyncActivationsSeen == 1 )
+          {
+            // Throw an exception only on the FIRST activation,
+            // otherwise we get into an infinite loop ...
+            if ( App.ThrowExceptionInMainWindowActivatedHandler_Async) 
+            { 
+              System.Diagnostics.Debug.WriteLine("Throwing exception in MainWindow Activated ASYNC handler") ;
+              throw new System.ApplicationException("Thrown in MainWindow Activated ASYNC handler") ; 
             }
           }
         }
